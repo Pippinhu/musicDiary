@@ -1,0 +1,12 @@
+<view class="container">
+    <image wx:if="{{img.length>0}}"class="pic"src="/images/{{img}}"></image> 
+    <image wx:if="{{img.length>0&&isPlayingMusic}}"class="playIcon"bindtap="onPause"src="/images/stop.png"></image>
+    <image wx:else bindtap="onPlay"class="playIcon"src="/images/play.png"></image>
+    <view class="imageList">
+      <view class="writer">{{abstract}}</view>
+    </view>
+    <view class="detail-headline">{{title}}</view>
+    <view class="content">{{content}}</view>
+    <view class="date">{{date}}</view>
+     <view class="memo">文字为原创，图片均来源于Behance，不可作商用</view>
+</view>

@@ -1,0 +1,19 @@
+<view class="container">
+  <view class="tab">
+    <image wx:if="{{img.length>0}}"class="logo"src="/images/{{img}}"></image>
+    <view class="intro">
+      <view class="headline">{{headline}}</view>
+      <view class="tag">{{tag}}</view>
+    </view>
+  </view>
+  <view class="abstract">{{abstract}}</view>
+  <view class="postList">
+    <block wx:for="{{postList}}">
+      <view bindtap="onTapToDetail"class="post"data-id="{{item._id}}">
+        <view class="title">{{item.title}}</view>
+        <view class="post-abstract">{{item.abstract}}</view>
+        <!-- <image class="image"src="/images/{{item.img}}"></image> -->
+      </view>
+    </block>
+  </view>
+</view>

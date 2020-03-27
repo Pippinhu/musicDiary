@@ -1,0 +1,25 @@
+<view class="container">
+  <!-- 歌名 -->
+  <view class="form_section">
+    <view class="form_text">
+      <view class="form_title"style="display:inline;">输入链接</view>
+      <view class="required"style="display:inline;">*</view>
+    </view>
+    <view class="form_input">
+      <input bindinput="bindKeyInput"
+      placeholder="仅限网易云音乐移动端点击分享->复制链接"placeholder-style="color:#A9A9A9;line-height:1;min-height: 1;"
+      />
+    </view>
+  </view>
+  <view class="page-section">
+      <view class="text_title_special">一些听歌时的想法</view>
+      <view class="textarea-wrp">
+        <textarea bindinput="bindText"style="height: 3em" />
+      </view>
+    </view>
+  <view class="input_button"bindtap="confirm">
+    <view class="button">提交</view>
+  </view>
+</view>
+  
+  
