@@ -1,22 +1,57 @@
 page{
-  background-color:#E9E9E9
+  background-color:#F6F6F6
 }
 
 .container{
   display:flex;
   flex-direction:column;
+  justify-content:center;
 
 }
 
-.form_section{
+.content{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  z-index:0;
+}
+
+/* .form_section{
   margin-top: 25rpx;
   background-color:white;
   padding:20rpx;
+} */
+.info{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+}
+
+.songInfo{
+  display:flex;
+  flex-direction:column;
+  margin-left:28rpx;
+}
+
+.songName{
+  color:rgba(34,34,34,1);
+  font-size:30rpx;
+  font-weight:bold;
+}
+
+.singer{
+  font-size:30rpx;
+  color:	#222222;
+  opacity:0.3
 }
 
 textarea {
-  width: 700rpx;
-  padding: 25rpx 0;
+  /* width: 700rpx; */
+  /* padding: 35rpx 25rpx; */
+  color:rgba(153,153,153,1);
+  font-size:28rpx;
+  letter-spacing:2rpx;
+  line-height:40rpx;
 }
 
 .text_title_special{
@@ -27,8 +62,11 @@ textarea {
 }
 
 .textarea-wrp {
-  padding: 0 25rpx;
+  padding: 35rpx 40rpx;
   background-color: #fff;
+  margin-top:38rpx;
+  height:386rpx;
+  border-radius:15rpx;
 }
 
 .page-section{
@@ -118,3 +156,123 @@ textarea {
   align-items:center;
 }
 
+.container{
+  padding:60rpx;
+}
+
+.linkCard{
+  display:flex;
+  justify-content: space-between;
+  background-color:white;
+  padding:25rpx;
+  align-items:center;
+  border-radius:15rpx;
+}
+
+.albumPic{
+  width:100rpx;
+  height:100rpx;
+}
+
+.addButton{
+  width:146rpx;
+  height:56rpx;
+  background-color:rgba(225,225,225,0.4);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  border-radius:30rpx;
+}
+
+.text_button{
+  color:rgba(100,100,100,1);
+  font-size:24rpx;
+}
+
+.tip{
+  display:flex;
+  margin-top:24rpx;
+}
+
+.tip_icon{
+  width:20rpx;
+  height:25rpx;
+}
+
+.tip_text{
+  color:rgba(34,34,34,0.3);
+  margin-left:13rpx;
+  font-size:22rpx;
+}
+
+.add_popup{
+  /* position:fixed; */
+  /* margin-top:433rpx; */
+  background-color:white;
+  padding:35rpx 25rpx;
+  border-radius: 15rpx;
+  margin-top:-400rpx;
+  z-index:1;
+  transition: 0.3s all ease;
+}
+
+.link_text{
+  color:rgba(34,34,34,0.3);
+  font-size:26rpx;
+
+}
+
+input{
+  margin-top:20rpx;
+  background-color:rgba(246,246,246,1);
+  border-radius:15rpx;
+  color:rgba(34,34,34,0.3);
+  font-size:24rpx;
+  padding:15rpx 20rpx;
+}
+
+.add_popup_button{
+  margin-top:32rpx;
+  display:flex;
+  font-size:26rpx;
+  justify-content:space-around
+}
+
+.button_hot{
+  width:100%;
+  /* width:200rpx; */
+  text-align:center;
+}
+
+
+.cancel_button{
+  color:rgba(153,153,153,1);
+}
+
+.submit_button{
+  color:rgba(34,34,34,1);
+}
+
+.add_mask{
+  background-color:rgba(0,0,0,0.3);
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+  height: 100%;
+  transition: all 0.2s ease-in;
+}
+
+.confirm_button{
+  margin-top:40rpx;
+  background-color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.confirm_text{
+  color:rgba(34,34,34,0.5);
+  padding:20rpx 4rpx;
+  font-size:28rpx;
+}

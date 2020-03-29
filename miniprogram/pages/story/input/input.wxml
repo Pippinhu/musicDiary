@@ -1,5 +1,4 @@
-<view class="container">
-  <!-- 歌名 -->
+<!-- <view class="container">
   <view class="form_section">
     <view class="form_text">
       <view class="form_title"style="display:inline;">输入链接</view>
@@ -21,5 +20,52 @@
     <view class="button">提交</view>
   </view>
 </view>
-  
+   -->
+<!-- 链接卡片，没有取到list时候的状态-->
+<view class="container">
+  <view class="content">
+    <view class="linkCard"wx:if="{{showDefault}}">
+      <image class="albumPic"src="/images/albumCover.png"></image>
+      <view class="addButton"bindtap="addPopup">
+        <view class="text_button">添加链接</view>
+      </view>
+    </view>
+    <view class="linkCard"wx:else>
+      <view class="info">
+        <image class="albumPic"src="{{linkMusic.albumPic}}"></image>
+        <view class="songInfo">
+          <view class="songName">{{linkMusic.songName}}</view>
+          <view class="singer">{{linkMusic.singer}}</view>
+        </view>
+      </view>
+      <view class="addButton"bindtap="addPopup">
+        <view class="text_button">更换链接</view>
+      </view>
+    </view>
+    <view class="tip">
+      <image class="tip_icon"src="/images/idea.png"></image>
+      <view class="tip_text">在网易云音乐App中点击"分享-复制链接”</view>
+    </view>
+    <view class="textarea-wrp">
+      <textarea placeholder="听这首歌时你在想什么呢……"placeholder-style="color:rgba(153,153,153,0.5)"bindinput="bindText"maxlength="-1"auto-height/>
+    </view>
+    <view class="confirm_button"bindtap="confirm">
+      <view class="confirm_text">添加</view>
+    </view>
+  </view>
+  <view class="add_popup"wx:if="{{showPopup}}">
+    <view class="link_text">在网易云音乐App中点击"分享-复制链接”</view>
+    <input auto-focus="true"bindinput="bindKeyInput"placeholder="链接粘贴在此处"placeholder-style="color:rgba(34,34,34,0.3);"></input>
+    <view class="add_popup_button">
+      <view class="button_hot"bindtap="cancelPopup">
+        <view class="cancel_button">取消</view>
+      </view>
+      <view class="button_hot"bindtap="submitPopup">
+        <view class="submit_button">完成</view>
+      </view>
+    </view>
+  </view>
+  <view class="add_mask"wx:if="{{showPopup}}"></view>
+</view>
+
   

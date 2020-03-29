@@ -35,7 +35,7 @@
       <!-- </scroll-view>
     </view> -->
     <!-- <view class="content"> -->
-    <text class="headline">发现</text>
+    <text class="headline">无口电波</text>
     <view class="content">
       <block wx:for="{{newList}}">
         <view class="postList">
@@ -45,10 +45,13 @@
               <view class="songName">{{item.songName}}</view>
               <view class="singer">{{item.singer}}</view>
             </view>
-            <image bindtap="playMusic"src="/images/{{item.showPlay?'play':'pause'}}.png"class="play-icon"data-id="{{index}}"></image>
+            <!-- <image bindtap="playMusic"src="/images/{{item.showPlay?'play':'pause'}}.png"class="play-icon"data-id="{{index}}"></image> -->
+            <image bindtap="playMusic"src="{{item.showPlay?'/images/play.png':'https://free-1258441037.cos.ap-chengdu.myqcloud.com/playing_green.gif'}}"class="play-icon"data-id="{{index}}"></image>
             <!-- <view class="{{item.showPlay?'play-icon':'pause-icon'}}"></view> -->
           </view>
-          <view class="feelings">{{item.feelings}}</view>
+          <view class="feelings">{{item.feelings}}
+            <!-- <view class="arrower"></view> -->
+          </view>
           <!-- <view class="post"data-id="{{item._id}}">
             <image mode="aspectFill" class="pic"src="{{item.img}}"></image> 
             <view class="post-headline">{{item.title}}</view>
@@ -58,6 +61,7 @@
       </block>
     </view>
   </view>
-  <view class="out"bindtap="toForm">
+  <!-- <view class="out"bindtap="toForm">
     <view class="core">推荐一首歌吧</view>
-  </view>
+  </view> -->
+  <image bindtap="toForm"class="btn_icon"src="/images/btn.png"></image>

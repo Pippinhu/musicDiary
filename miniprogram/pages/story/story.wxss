@@ -67,11 +67,15 @@
   width:100%;
 } */
 
+page{
+  background-color:#F6F6F6
+}
+
 .container{
   display:flex;
   flex-direction:column;
   padding:30rpx;
-  padding-bottom:100rpx;
+  /* padding-bottom:100rpx; */
 }
 
 .headline{
@@ -90,36 +94,53 @@
 .postList{
   display:flex;
   flex-direction:column;
-  margin-bottom:100rpx;
+  margin-bottom:90rpx;
 }
 
 .songName{
+  color:rgba(34,34,34,1);
   font-size:30rpx;
+  font-weight:bold;
 }
 
 .singer{
   font-size:30rpx;
-  color:	#C0C0C0;
+  color:	#222222;
+  opacity:0.3
 }
 
 .play-icon{
   position:absolute;
-  right:80rpx;
-	width:30rpx;
-  height:30rpx;
-  margin-right:20rpx;
+  right:78rpx;
+	width:40rpx;
+  height:40rpx;
 }
 
-
 .feelings{
-  margin-top:20rpx;
-  padding:25rpx;
-  font-size:30rpx;
-  letter-spacing:3rpx;
-  color:#969AA5;
-  line-height:1.5em;
-  box-shadow:2px 2px 30px 	#DCDCDC;
+  width:550rpx;
+  position:relative;
+  margin-top:22rpx;
+  padding:28rpx 38rpx;
+  font-size:26rpx;
+  letter-spacing:2rpx;
+  color:rgba(153,153,153,1);
+  line-height:40rpx;
+  background-color:#FFFFFF;
+  /* box-shadow:2px 2px 30px 	#DCDCDC; */
   border-radius:15rpx;
+}
+
+.arrower{
+  position: absolute;
+  top: 5px;
+  right: -16px;
+  /* 圆角的位置*/
+  width: 0;
+  height: 0;
+  font-size: 0;
+  border: solid 4px;
+  border-color: white #4D4948 #4D4948 white;
+
 }
 
 .info{
@@ -136,10 +157,10 @@
 .songInfo{
   display:flex;
   flex-direction:column;
-  margin-left:20rpx;
+  margin-left:28rpx;
 }
 
-.out{
+/* .out{
   background-color:white;
   position:fixed;
   bottom:0;
@@ -157,4 +178,12 @@
   padding:20rpx 150rpx;
   border-radius:36rpx;
   font-size:25rpx;
+} */
+
+.btn_icon{
+  position:fixed;
+  right:50rpx;
+  bottom:115rpx;
+  width:110rpx;
+  height:110rpx;
 }

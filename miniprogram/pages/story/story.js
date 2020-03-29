@@ -11,7 +11,8 @@ Page({
     totalCount:0,
     pageSize:10,
     index:'',
-    newList:[]
+    newList:[],
+    showPlayList:[],
   },
 
   /**
@@ -89,13 +90,12 @@ Page({
         console.log('成功获取')
         console.log(res)         
         that.data.newList = res.result.data.map(function(item,){
-          return Object.assign(item,{'showPlay':'true'})
+          return Object.assign(item,{'showPlay':true})
         })
         console.log(that.data.newList)
         that.setData({
           newList:that.data.newList
-        })
-        
+        })   
       }
     })
   },
@@ -170,6 +170,10 @@ Page({
   // },
 
   playMusic:function(e){
+    // this.setData({
+    //   newList:this.data.newList
+    // })
+    console.log(this.data.newList)
     const audio = wx.getBackgroundAudioManager();
     //拿到当前播放按钮的index值
     this.data.index=e.currentTarget.dataset.id
@@ -179,7 +183,13 @@ Page({
       audio.src=this.data.newList[this.data.index].musicUrl;
       audio.autoplay = true;
       audio.title=this.data.newList[this.data.index].songName
-      //将播放状态修改为false
+          // 所有index的showplay值归0
+      this.data.newList=this.data.newList.map((item)=>{
+        // console.log(item.showPlay)
+        item.showPlay=true
+        return item
+      })
+      // 将播放状态修改为false
       this.data.newList[this.data.index].showPlay=false
       console.log(this.data.newList)
       this.setData({
@@ -194,6 +204,12 @@ Page({
         newList:this.data.newList
       })
     }
+    // this.data.showPlayLis=this.data.newList.map((item)=>{
+    //   return item.showPlay
+    // })
+
+   this.data.showPlayList = this.data.newList.map(obj => {return{'showPlay':obj.showPlay}})
+    console.log(this.data.showPlayList)
     // this.data.index=e.currentTarget.dataset.id
     // const audio = wx.getBackgroundAudioManager();
     // if(this.data.showPlay){
