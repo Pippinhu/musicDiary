@@ -7,11 +7,11 @@ Page({
    * 页面的初始数据
    */
   data: {
-    postList:[],
-    totalCount:0,
-    pageSize:10,
-    index:'',
-    newList:[]
+    postList: [],
+    totalCount: 0,
+    pageSize: 10,
+    index: '',
+    newList: []
   },
 
   /**
@@ -57,7 +57,7 @@ Page({
   //     success: res => {
   //       that.data.totalCount=res.total;
   //     }
-      
+
   //   })
   //   //get the frist ten
   //   try {
@@ -80,22 +80,22 @@ Page({
   //     wx.stopPullDownRefresh();}
   // },
 
-  getData(){
-    let that=this;
+  getData() {
+    let that = this;
     wx.cloud.callFunction({
-      name:'getMusic',
-      data:{},
-      success:res=>{
+      name: 'getMusic',
+      data: {},
+      success: res => {
         console.log('成功获取')
-        console.log(res)         
-        that.data.newList = res.result.data.map(function(item,){
-          return Object.assign(item,{'showPlay':'true'})
+        console.log(res)
+        that.data.newList = res.result.data.map(function (item, ) {
+          return Object.assign(item, { 'showPlay': 'true' })
         })
         console.log(that.data.newList)
         that.setData({
-          newList:that.data.newList
+          newList: that.data.newList
         })
-        
+
       }
     })
   },
@@ -113,9 +113,9 @@ Page({
   //   })
   // },
 
-  toForm:function(){
+  toForm: function () {
     wx.navigateTo({
-      url:'../story/input/input'
+      url: '../story/input/input'
     })
   },
 
@@ -169,29 +169,28 @@ Page({
   //   }
   // },
 
-  playMusic:function(e){
+  playMusic: function (e) {
     const audio = wx.getBackgroundAudioManager();
     //拿到当前播放按钮的index值
-    this.data.index=e.currentTarget.dataset.id
+    this.data.index = e.currentTarget.dataset.id
     // let showPlay= `newList[${this.data.index}].showPlay`
     //如果当前播放状态是播放状态
-    if(this.data.newList[this.data.index].showPlay){
-      audio.src=this.data.newList[this.data.index].musicUrl;
+    if (this.data.newList[this.data.index].showPlay) {
+      audio.src = this.data.newList[this.data.index].musicUrl;
       audio.autoplay = true;
-      audio.title=this.data.newList[this.data.index].songName
+      audio.title = this.data.newList[this.data.index].songName
       //将播放状态修改为false
-      this.data.newList[this.data.index].showPlay=false
+      this.data.newList[this.data.index].showPlay = false
       console.log(this.data.newList)
       this.setData({
-        newList:this.data.newList
+        newList: this.data.newList
       })
-    }
-    else{
+    } else {
       audio.pause();
-      this.data.newList[this.data.index].showPlay=true
+      this.data.newList[this.data.index].showPlay = true
       console.log(this.data.newList)
       this.setData({
-        newList:this.data.newList
+        newList: this.data.newList
       })
     }
     // this.data.index=e.currentTarget.dataset.id
@@ -216,23 +215,23 @@ Page({
     this.onLoad(); //重新加载onLoad()
   },
 
-  onTapToDetail:function(e){
-    let postId=e.currentTarget.dataset.id;
+  onTapToDetail: function (e) {
+    let postId = e.currentTarget.dataset.id;
     console.log(postId);
     wx.navigateTo({
-      url:'../story/detail/detail?id='+postId,
+      url: '../story/detail/detail?id=' + postId,
     })
   },
 
-  onTapTo1:function(e) {
-    let label ="逃避拥挤";
+  onTapTo1: function (e) {
+    let label = "逃避拥挤";
     wx.navigateTo({
       url: '../story/sort/sort?id=' + label,
     })
   },
 
   onTapTo2: function (e) {
-    let label="坐地成仙"
+    let label = "坐地成仙"
     wx.navigateTo({
       url: '../story/sort/sort?id=' + label,
     })
