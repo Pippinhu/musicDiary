@@ -37,7 +37,7 @@
   <!-- <view class="content"> -->
   <text class="headline">发现</text>
   <view class="content">
-    <block wx:for="{{newList}}">
+    <block wx:for="{{musicList}}">
       <view class="postList">
         <view class="info">
           <image class="pic" mode="aspectFill" src="{{item.albumPic}}"></image>
@@ -45,8 +45,8 @@
             <view class="songName">{{item.songName}}</view>
             <view class="singer">{{item.singer}}</view>
           </view>
-          <image bindtap="playMusic" src="/images/{{item.showPlay?'play':'pause'}}.png" class="play-icon"
-            data-id="{{index}}"></image>
+          <image bindtap="playMusic" src="/images/{{item._id !== currentPlayMusicId ? 'play' : 'pause'}}.png"
+            class="play-icon" data-id="{{item._id}}"></image>
           <!-- <view class="{{item.showPlay?'play-icon':'pause-icon'}}"></view> -->
         </view>
         <view class="feelings">{{item.feelings}}</view>

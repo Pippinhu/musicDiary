@@ -7,111 +7,21 @@ Page({
    * 页面的初始数据
    */
   data: {
-    postList: [],
-    totalCount: 0,
-    pageSize: 10,
-    index: '',
-    newList: []
+    musicList: [],
+    currentPlayMusicId: null,
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function () {
-    this.getData();
-    // db.collection('story').get({
-    //   success: res => {
-    //     this.setData({
-    //       postList:res.data
-    //     })
-    //   }
-    // })
-    wx.stopPullDownRefresh()
-  },
-
-  //get list data
-  // getData:function(){
-  //   let that=this;
-  //   wx.cloud.callFunction({
-  //     name:'getMusic',
-  //     data:{},
-  //     success:res=>{
-  //       console.log('成功获取')
-  //       console.log(res)
-  //       that.setData({
-  //         postList:res.result.data
-  //       })
-  //     }  
-  //   })
-  //   //postlist增加播放控
-  //   console.log(that.data.postList)
-  //   that.data.newList = that.data.postList.map(function(item){
-  //     item.push({'showPlay':'true'})
-  //   })
-
-  //   console.log(that.data.newList)
-  //   var that=this;
-  //   const db = wx.cloud.database();
-  //   //get the total data
-  //   db.collection('story').count({
-  //     success: res => {
-  //       that.data.totalCount=res.total;
-  //     }
-
-  //   })
-  //   //get the frist ten
-  //   try {
-  //     db.collection('story').limit(that.data.pageSize).get({
-  //       success: res => {
-  //         console.log(res.data)
-  //         this.setData({
-  //           postList: res.data
-  //       })
-  //       wx.hideNavigationBarLoading();//hide loading 
-  //       wx.stopPullDownRefresh();
-  //     },
-  //     fail:function(event){
-  //       wx.hideNavigationBarLoading();//hide loading 
-  //       wx.stopPullDownRefresh();
-  //     }
-  //   })
-  // }catch(e){
-  //     wx.hideNavigationBarLoading();//hide loading 
-  //     wx.stopPullDownRefresh();}
-  // },
 
   getData() {
-    let that = this;
     wx.cloud.callFunction({
       name: 'getMusic',
       data: {},
       success: res => {
-        console.log('成功获取')
-        console.log(res)
-        that.data.newList = res.result.data.map(function (item, ) {
-          return Object.assign(item, { 'showPlay': 'true' })
-        })
-        console.log(that.data.newList)
-        that.setData({
-          newList: that.data.newList
-        })
-
+        console.log('成功获取', { res })
+        that.setData({ musicList: res.result.data })
+        wx.stopPullDownRefresh()
       }
     })
   },
-
-
-
-  // async getNewData(){
-  //   let that=this;
-  //   console.log(that.getData)
-  //   let postList= await that.getData()
-  //   //postlist增加播放控
-  //   console.log(postList)
-  //   that.data.newList = that.data.postList.map(function(item){
-  //     item.push({'showPlay':'true'})
-  //   })
-  // },
 
   toForm: function () {
     wx.navigateTo({
@@ -119,100 +29,19 @@ Page({
     })
   },
 
-  //pull down and load funciton
-  // onReachBottom:function(){
-  //   var that=this;
-  //   var temp =[];
-  //   let length=this.data.postList.length
-  //   if (this.data.postList.length<this.data.totalCount){
-  //     try{
-  //       // console.log(this.data.totalCount)
-  //       // console.log(this.data.postList.length)
-  //       const db=wx.cloud.database();
-  //       db.collection('story')
-  //         .skip(length)
-  //         .limit(that.data.pageSize)
-  //         .get({
-  //           success: res => {
-  //             if(res.data.length>0){
-  //               for(let i=0;i<res.data.length;i++){
-  //                 let tempPost = res.data[i];
-  //                 temp.push(tempPost);
-  //               }
-
-  //             let totalPost={};
-  //             totalPost=that.data.postList.concat(temp);
-
-  //             console.log(totalPost)
-  //             that.setData({
-  //               postList:totalPost
-  //             })
-
-  //         }else{
-  //           wx.showToast({
-  //             title:'no more data'
-  //           })
-  //         }
-  //       },
-  //       fail:function(evet){
-  //         console.log(event);
-  //       }
-  //     })
-  //   }catch(e){
-  //     console.error(e);
-  //   }
-  // }
-  // else{
-  //     wx.showToast({
-  //       title:"no more data"
-  //     })
-  //   }
-  // },
-
   playMusic: function (e) {
     const audio = wx.getBackgroundAudioManager();
-    //拿到当前播放按钮的index值
-    this.data.index = e.currentTarget.dataset.id
-    // let showPlay= `newList[${this.data.index}].showPlay`
-    //如果当前播放状态是播放状态
-    if (this.data.newList[this.data.index].showPlay) {
-      audio.src = this.data.newList[this.data.index].musicUrl;
+    const musicId = e.currentTarget.dataset.id
+    if (this.data.currentPlayMusicId !== musicId) {
+      const music = this.musicList.filter(e => e._id === musicId)[0]
+      audio.src = music.musicUrl;
+      audio.title = music.songName
       audio.autoplay = true;
-      audio.title = this.data.newList[this.data.index].songName
-      //将播放状态修改为false
-      this.data.newList[this.data.index].showPlay = false
-      console.log(this.data.newList)
-      this.setData({
-        newList: this.data.newList
-      })
+      this.setData({ currentPlayMusicId: musicId })
     } else {
       audio.pause();
-      this.data.newList[this.data.index].showPlay = true
-      console.log(this.data.newList)
-      this.setData({
-        newList: this.data.newList
-      })
+      this.setData({ currentPlayMusicId: null })
     }
-    // this.data.index=e.currentTarget.dataset.id
-    // const audio = wx.getBackgroundAudioManager();
-    // if(this.data.showPlay){
-    //   audio.src=this.data.postList[this.data.index].musicUrl;
-    //   audio.autoplay = true;
-    //   audio.title=this.data.postList[this.data.index].songName
-    //   this.data.showPlay=this.data.postList[this.data.index].showPlay
-    //   this.setData({
-    //     showPlay:false
-    //   })
-    // }else{
-    //   audio.pause();
-    //   this.setData({
-    //     showPlay:true
-    //   })
-    // }
-  },
-
-  onPullDownRefresh: function () {
-    this.onLoad(); //重新加载onLoad()
   },
 
   onTapToDetail: function (e) {
@@ -282,7 +111,12 @@ Page({
     })
   },
 
-
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function () {
+    this.getData();
+  },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -312,8 +146,9 @@ Page({
 
   },
 
-
-
+  onPullDownRefresh: function () {
+    this.getData(); //重新加载onLoad()
+  },
 
   /**
    * 用户点击右上角分享
@@ -321,4 +156,5 @@ Page({
   onShareAppMessage: function () {
 
   }
+
 })
