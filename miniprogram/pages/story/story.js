@@ -27,125 +27,96 @@ Page({
   getData(){
     let that=this;
     console.log(app.globalData.list.length)
-    // if(app.globalData.list.length==0){
-    //   wx.cloud.callFunction({
-    //     name:'getMusic',
-    //     data:{},
-    //     success:res=>{
-    //       that.data.newList = res.result.data.map(function(item,index){
-    //         return Object.assign(item,{showPlay:true})
-    //       })
-    //       that.setData({
-    //         newList:that.data.newList
-    //       }) 
-    //       app.globalData.list = that.data.newList
-    //     }
-    //   })
-    // }
-    // //如果列表存在,就不需要每项都加上showPlay,但是
-    // else{
-    //   that.setData({
-    //     newList:app.globalData.list
-    //   }) 
-    // }
     wx.cloud.callFunction({
       name:'getMusic',
       data:{},
       success:res=>{
-        let list = app.globalData.list 
-        // let listId = app.globalData.listId
-        let newList=res.result.data
-        
-        // if(list.length!==0){
-          //先把当前列表的id挑出来
-          // let nowId = newList.map(item=>item._id)
-          // //找到id不一致的那个
-          // let lonelyId = nowId.filter((item)=>
-          //     listId.indexOf(item)==-1
-          // )
-          // console.log(lonelyId)
-          // //找到这个不同的id所在的index的,然后给这个element加上showPlay=true
-          // let finalList = 
-
-          //其实应该是这个逻辑,让新列表的每一个id和旧列表的每一个id去对比,一致的showPlay=旧列表的Show,id不一致的showPlay==true
-          // console.log(list[0]._id)
-          // console.log(newList[0]._id)
-          if(list.length!==0){
-            for(let i=0;i<newList.length;i++){
-              for(let j=0;j<list.length;j++){
-                if(newList[i]._id===list[j]._id){
-                  newList[i].showPlay=list[j].showPlay
-                  return
-                }
-                else{
-                  newList[i].showPlay=true
-                }
-              }
-            }
-            this.setData({
-              newList:newList
-            })   
-            app.globalData.list = that.data.newList
-          }  
-          else{
-            newList = newList.map(function(item){
-              return Object.assign(item,{showPlay:true})
-              })
-            this.setData({
-              newList:newList
-            }) 
-            app.globalData.list = that.data.newList
+        //刷新前的旧数据
+        let list = app.globalData.list
+        //刷新后的新数据
+        let newList = res.result.data
+        if(list.length!==0){
+          //找到两个列表中不同的数据
+          let diffList = newList.filter(e=>!list.some(e1=>e1._id==e._id))
+          let finalDiff = diffList.map(item=>Object.assign(item,{showPlay:true}))
+          if(diffList.length!==0){
+            list.splice(0,0,finalDiff[0])
+          }
+          that.setData({
+            newList:list
+          })
+          app.globalData.list=list
+        }
+        else{
+          newList = newList.map(function(item){
+            return Object.assign(item,{showPlay:true})
+          })
+          that.setData({
+            newList:newList
+          })
+          app.globalData.list=newList
         }
       }
     })
   },
-        
+    
+    // }
+        //两者数据结合
+        // let coupleList = list.concat(newList)
+        // //找到两者数据里ID不一样的或者showPlay不存在的组成新的差异数据列表
+        // let diffList = coupleList.filter(e=>
+        //     e._id=
+        // )
 
 
-          // let listAll = list.concat(newList)
-          // lonelyList = listAll.filter(item=>{
-          //   //  list.indexOf(item)==-1 | newList.indexOf(item)==-1
-        
-          // })
-          // console.log(lonelyList)
 
-          // that.data.newList = res.result.data.map(function(item,index){
-          //   console.log(item)
-          //   console.log(item._id)
-          //   if(item._id!==app.globalData.list[index]._id){
-          //     Object.assign(item,{showPlay:true})
-          //   }           // return Object.assign(item,{showPlay:true})
-          // })
-          // that.setData({
-          //   newList:that.data.newList
-          // }) 
-          // that.data.newList = res.result.data.filter(item,index=>{
-          //   list[index].indexOf(item._id)==-1
-          // })
-          // console.log(that.data.newList)
-          // for(let i = 0;i<newList.length-1;i++){
-          //   for(let j = 0;j<list.length-1;j++){
-          //     if(list[j]._id!==newList[i]._id){
-          //       // listAll.push(list[j])
-          //       listAll++
-          //     }
-          //     else{
-          //       console.log('ha')
-          //     }
-          //   }
-          // }
-          // console.log(listAll)
-        // else{
-        //   console.log('ddddd')
-        //   that.data.newList = res.result.data.map(function(item){
-        //     return Object.assign(item,{showPlay:true})
-        //   })
-        //   app.globalData.listId = res.result.data.map(item=>item._id)
-        //   that.setData({
-        //     newList:that.data.newList
-        //   }) 
+
+
+
+        // let list = app.globalData.list 
+        // // let listId = app.globalData.listId
+        // let newList=res.result.data      
+        // // if(list.length!==0){
+        //   //先把当前列表的id挑出来
+        //   // let nowId = newList.map(item=>item._id)
+        //   // //找到id不一致的那个
+        //   // let lonelyId = nowId.filter((item)=>
+        //   //     listId.indexOf(item)==-1
+        //   // )
+        //   // console.log(lonelyId)
+        //   // //找到这个不同的id所在的index的,然后给这个element加上showPlay=true
+        //   // let finalList = 
+
+        //   //其实应该是这个逻辑,让新列表的每一个id和旧列表的每一个id去对比,一致的showPlay=旧列表的Show,id不一致的showPlay==true
+        //   // console.log(list[0]._id)
+        //   // console.log(newList[0]._id)
+        //   if(list.length!==0){
+        //     for(let i=0;i<newList.length;i++){
+        //       for(let j=0;j<list.length;j++){
+        //         if(newList[i]._id===list[j]._id){
+        //           newList[i].showPlay=list[j].showPlay
+        //           return
+        //         }
+        //         else{
+        //           newList[i].showPlay=true
+        //         }
+        //       }
+        //     }
+        //     this.setData({
+        //       newList:newList
+        //     })   
+        //     app.globalData.list = that.data.newList
+        //   }  
+        //   else{
+        //     newList = newList.map(function(item){
+        //       return Object.assign(item,{showPlay:true})
+        //       })
+        //     this.setData({
+        //       newList:newList
+        //     }) 
+        //     app.globalData.list = that.data.newList
         // }
-  
+
 
   toForm:function(){
     wx.navigateTo({
@@ -254,41 +225,6 @@ Page({
       }
     }
     app.globalData.listIndex = index
-
-    //拿到当前播放音频的index值
-    // this.data.index=e.currentTarget.dataset.id
-    // //如果当前播放状态是播放状态
-    // if(this.data.newList[this.data.index].showPlay){
-    //   audio.src=this.data.newList[this.data.index].musicUrl;
-    //   audio.autoplay = true;
-    //   audio.title=this.data.newList[this.data.index].songName
-    //   // 所有index的showplay值归0
-    //   this.data.newList=this.data.newList.map((item)=>{
-    //     // console.log(item.showPlay)
-    //     item.showPlay=true
-    //     return item
-    //   })
-    //   //将播放状态修改为false
-    //   this.data.newList[this.data.index].showPlay=false
-    //   console.log(this.data.newList)
-    //   this.setData({
-    //     newList:this.data.newList
-    //   })
-    // }
-    // else{
-    //   audio.pause();
-    //   this.data.newList[this.data.index].showPlay=true
-    //   console.log(this.data.newList)
-    //   this.setData({
-    //     newList:this.data.newList
-    //   })
-    // }
-    // this.data.showPlayList = this.data.newList.map(obj => {return{'showPlay':obj.showPlay}})
-    // console.log(this.data.showPlayList);
-    // wx.setStorage({
-    //   key:'isPlay',
-    //   data:this.data.showPlayList
-    // })
   },
 
   onPullDownRefresh: function () {
