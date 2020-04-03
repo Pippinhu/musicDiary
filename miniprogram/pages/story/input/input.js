@@ -133,11 +133,12 @@ Page({
       data: {},
       method: 'GET',
       success: function (res) {
+        let songName=res.data.songs[0].name
         let songData={
           //排序
           sort:sort,
           //歌名
-          songName:res.data.songs[0].name,
+          songName:(songName.length>=15)?(songName.slice(0,16)+'...'):songName,
           //歌手
           singer:res.data.songs[0].artists[0].name,
           //专辑图片

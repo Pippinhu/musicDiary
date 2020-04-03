@@ -47,7 +47,7 @@
       <view class="tip_text">在网易云音乐App中点击"分享-复制链接”</view>
     </view>
     <view class="textarea-wrp">
-      <textarea placeholder="听这首歌时你在想什么呢……"placeholder-style="color:rgba(153,153,153,0.5)"bindinput="bindText"maxlength="-1"auto-height/>
+      <textarea placeholder="听这首歌时你在想什么呢……"placeholder-style="color:rgba(153,153,153,0.5)"bindinput="bindText"maxlength="-1"style="height:200rpx" />
     </view>
     <view class="confirm_button"bindtap="confirm">
       <view class="confirm_text">添加</view>

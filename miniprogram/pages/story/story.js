@@ -1,5 +1,6 @@
 // pages/story/story.js
 const db = wx.cloud.database();
+const app = getApp();
 
 Page({
 
@@ -12,7 +13,7 @@ Page({
     pageSize:10,
     index:'',
     newList:[],
-    showPlayList:[],
+    showPlayList:'',
   },
 
   /**
@@ -20,98 +21,131 @@ Page({
    */
   onLoad: function () {
     this.getData();
-    // db.collection('story').get({
-    //   success: res => {
-    //     this.setData({
-    //       postList:res.data
-    //     })
-    //   }
-    // })
     wx.stopPullDownRefresh()
   },
 
-  //get list data
-  // getData:function(){
-  //   let that=this;
-  //   wx.cloud.callFunction({
-  //     name:'getMusic',
-  //     data:{},
-  //     success:res=>{
-  //       console.log('成功获取')
-  //       console.log(res)
-  //       that.setData({
-  //         postList:res.result.data
-  //       })
-  //     }  
-  //   })
-  //   //postlist增加播放控
-  //   console.log(that.data.postList)
-  //   that.data.newList = that.data.postList.map(function(item){
-  //     item.push({'showPlay':'true'})
-  //   })
-
-  //   console.log(that.data.newList)
-  //   var that=this;
-  //   const db = wx.cloud.database();
-  //   //get the total data
-  //   db.collection('story').count({
-  //     success: res => {
-  //       that.data.totalCount=res.total;
-  //     }
-      
-  //   })
-  //   //get the frist ten
-  //   try {
-  //     db.collection('story').limit(that.data.pageSize).get({
-  //       success: res => {
-  //         console.log(res.data)
-  //         this.setData({
-  //           postList: res.data
-  //       })
-  //       wx.hideNavigationBarLoading();//hide loading 
-  //       wx.stopPullDownRefresh();
-  //     },
-  //     fail:function(event){
-  //       wx.hideNavigationBarLoading();//hide loading 
-  //       wx.stopPullDownRefresh();
-  //     }
-  //   })
-  // }catch(e){
-  //     wx.hideNavigationBarLoading();//hide loading 
-  //     wx.stopPullDownRefresh();}
-  // },
-
   getData(){
     let that=this;
+    console.log(app.globalData.list.length)
+    // if(app.globalData.list.length==0){
+    //   wx.cloud.callFunction({
+    //     name:'getMusic',
+    //     data:{},
+    //     success:res=>{
+    //       that.data.newList = res.result.data.map(function(item,index){
+    //         return Object.assign(item,{showPlay:true})
+    //       })
+    //       that.setData({
+    //         newList:that.data.newList
+    //       }) 
+    //       app.globalData.list = that.data.newList
+    //     }
+    //   })
+    // }
+    // //如果列表存在,就不需要每项都加上showPlay,但是
+    // else{
+    //   that.setData({
+    //     newList:app.globalData.list
+    //   }) 
+    // }
     wx.cloud.callFunction({
       name:'getMusic',
       data:{},
       success:res=>{
-        console.log('成功获取')
-        console.log(res)         
-        that.data.newList = res.result.data.map(function(item,){
-          return Object.assign(item,{'showPlay':true})
-        })
-        console.log(that.data.newList)
-        that.setData({
-          newList:that.data.newList
-        })   
+        let list = app.globalData.list 
+        // let listId = app.globalData.listId
+        let newList=res.result.data
+        
+        // if(list.length!==0){
+          //先把当前列表的id挑出来
+          // let nowId = newList.map(item=>item._id)
+          // //找到id不一致的那个
+          // let lonelyId = nowId.filter((item)=>
+          //     listId.indexOf(item)==-1
+          // )
+          // console.log(lonelyId)
+          // //找到这个不同的id所在的index的,然后给这个element加上showPlay=true
+          // let finalList = 
+
+          //其实应该是这个逻辑,让新列表的每一个id和旧列表的每一个id去对比,一致的showPlay=旧列表的Show,id不一致的showPlay==true
+          // console.log(list[0]._id)
+          // console.log(newList[0]._id)
+          if(list.length!==0){
+            for(let i=0;i<newList.length;i++){
+              for(let j=0;j<list.length;j++){
+                if(newList[i]._id===list[j]._id){
+                  newList[i].showPlay=list[j].showPlay
+                  return
+                }
+                else{
+                  newList[i].showPlay=true
+                }
+              }
+            }
+            this.setData({
+              newList:newList
+            })   
+            app.globalData.list = that.data.newList
+          }  
+          else{
+            newList = newList.map(function(item){
+              return Object.assign(item,{showPlay:true})
+              })
+            this.setData({
+              newList:newList
+            }) 
+            app.globalData.list = that.data.newList
+        }
       }
     })
   },
+        
 
 
+          // let listAll = list.concat(newList)
+          // lonelyList = listAll.filter(item=>{
+          //   //  list.indexOf(item)==-1 | newList.indexOf(item)==-1
+        
+          // })
+          // console.log(lonelyList)
 
-  // async getNewData(){
-  //   let that=this;
-  //   console.log(that.getData)
-  //   let postList= await that.getData()
-  //   //postlist增加播放控
-  //   console.log(postList)
-  //   that.data.newList = that.data.postList.map(function(item){
-  //     item.push({'showPlay':'true'})
-  //   })
-  // },
+          // that.data.newList = res.result.data.map(function(item,index){
+          //   console.log(item)
+          //   console.log(item._id)
+          //   if(item._id!==app.globalData.list[index]._id){
+          //     Object.assign(item,{showPlay:true})
+          //   }           // return Object.assign(item,{showPlay:true})
+          // })
+          // that.setData({
+          //   newList:that.data.newList
+          // }) 
+          // that.data.newList = res.result.data.filter(item,index=>{
+          //   list[index].indexOf(item._id)==-1
+          // })
+          // console.log(that.data.newList)
+          // for(let i = 0;i<newList.length-1;i++){
+          //   for(let j = 0;j<list.length-1;j++){
+          //     if(list[j]._id!==newList[i]._id){
+          //       // listAll.push(list[j])
+          //       listAll++
+          //     }
+          //     else{
+          //       console.log('ha')
+          //     }
+          //   }
+          // }
+          // console.log(listAll)
+        // else{
+        //   console.log('ddddd')
+        //   that.data.newList = res.result.data.map(function(item){
+        //     return Object.assign(item,{showPlay:true})
+        //   })
+        //   app.globalData.listId = res.result.data.map(item=>item._id)
+        //   that.setData({
+        //     newList:that.data.newList
+        //   }) 
+        // }
+  
 
   toForm:function(){
     wx.navigateTo({
@@ -119,187 +153,147 @@ Page({
     })
   },
 
-  //pull down and load funciton
-  // onReachBottom:function(){
-  //   var that=this;
-  //   var temp =[];
-  //   let length=this.data.postList.length
-  //   if (this.data.postList.length<this.data.totalCount){
-  //     try{
-  //       // console.log(this.data.totalCount)
-  //       // console.log(this.data.postList.length)
-  //       const db=wx.cloud.database();
-  //       db.collection('story')
-  //         .skip(length)
-  //         .limit(that.data.pageSize)
-  //         .get({
-  //           success: res => {
-  //             if(res.data.length>0){
-  //               for(let i=0;i<res.data.length;i++){
-  //                 let tempPost = res.data[i];
-  //                 temp.push(tempPost);
-  //               }
+  onShow: function () {
+    const audio = wx.getBackgroundAudioManager()
+    audio.onPlay(()=>{
+      let list = app.globalData.list
+      let index = app.globalData.listIndex;
+      app.globalData.play=true
+      app.globalData.stop=false
+      app.globalData.pause=false
+      list[index].showPlay=false
+      this.setData({
+        newList:list
+      })
+    })
+    audio.onPause(()=>{
+      let list = app.globalData.list
+      let index = app.globalData.listIndex;
+      app.globalData.play=false
+      app.globalData.stop=false
+      app.globalData.pause=true
+      list[index].showPlay=true
+      this.setData({
+        newList:list
+      })
+    })
+    audio.onStop(()=>{
+      let list = app.globalData.list
+      let index = app.globalData.listIndex;
+      app.globalData.play=false
+      app.globalData.stop=true
+      app.globalData.pause=false
+      list[index].showPlay=true
+      this.setData({
+        newList:list
+      })
+    })
+    audio.onEnded(()=>{
+      const audio = wx.getBackgroundAudioManager()
+      let list = app.globalData.list
+      let index = app.globalData.listIndex
+      let len = list.length - 1
+      //
+      let next = index + 1 
+      //如果已经播到最后一首
+      if(next > len){
+        audio.src = list[0].musicUrl
+        audio.title = list[0].songName
+        audio.singer = list[0].singer
+        list[index].showPlay=true
+          this.setData({
+            newList:list
+          })
+        app.globalData.listIndex = 0
+      }
+      else{
+        audio.src = list[next].musicUrl
+        audio.title = list[next].songName
+        audio.singer = list[next].singer
+        list[index].showPlay=true
+        this.setData({
+          newList:list
+        })
+        app.globalData.listIndex = next
+      }
+    })
+  },
 
-  //             let totalPost={};
-  //             totalPost=that.data.postList.concat(temp);
-
-  //             console.log(totalPost)
-  //             that.setData({
-  //               postList:totalPost
-  //             })
-
-  //         }else{
-  //           wx.showToast({
-  //             title:'no more data'
-  //           })
-  //         }
-  //       },
-  //       fail:function(evet){
-  //         console.log(event);
-  //       }
-  //     })
-  //   }catch(e){
-  //     console.error(e);
-  //   }
-  // }
-  // else{
-  //     wx.showToast({
-  //       title:"no more data"
-  //     })
-  //   }
-  // },
+  musicOn:function(index,list){
+    const audio = wx.getBackgroundAudioManager();
+    audio.src = list[index].musicUrl
+    audio.title = list[index].songName
+    audio.singer = list[index].singer
+  },
 
   playMusic:function(e){
-    // this.setData({
-    //   newList:this.data.newList
-    // })
-    console.log(this.data.newList)
     const audio = wx.getBackgroundAudioManager();
-    //拿到当前播放按钮的index值
-    this.data.index=e.currentTarget.dataset.id
-    // let showPlay= `newList[${this.data.index}].showPlay`
-    //如果当前播放状态是播放状态
-    if(this.data.newList[this.data.index].showPlay){
-      audio.src=this.data.newList[this.data.index].musicUrl;
-      audio.autoplay = true;
-      audio.title=this.data.newList[this.data.index].songName
-          // 所有index的showplay值归0
-      this.data.newList=this.data.newList.map((item)=>{
-        // console.log(item.showPlay)
-        item.showPlay=true
-        return item
-      })
-      // 将播放状态修改为false
-      this.data.newList[this.data.index].showPlay=false
-      console.log(this.data.newList)
-      this.setData({
-        newList:this.data.newList
-      })
+    let index = e.currentTarget.dataset.id
+    let list = app.globalData.list
+    if(app.globalData.stop){
+      this.musicOn(index,list)
+    }else{
+      if(app.globalData.play){
+        //点击了列表另一个音乐
+        if(index!=app.globalData.listIndex){
+          this.musicOn(index,list)
+          list[app.globalData.listIndex].showPlay=true
+          this.setData({
+            newList:list
+          })
+        }
+        else{
+          audio.pause()
+        }
+      }else{
+        if(index!==app.globalData.listIndex){
+          this.musicOn(index,list)
+        }else{
+        audio.play()
+        }
+      }
     }
-    else{
-      audio.pause();
-      this.data.newList[this.data.index].showPlay=true
-      console.log(this.data.newList)
-      this.setData({
-        newList:this.data.newList
-      })
-    }
-    // this.data.showPlayLis=this.data.newList.map((item)=>{
-    //   return item.showPlay
-    // })
+    app.globalData.listIndex = index
 
-   this.data.showPlayList = this.data.newList.map(obj => {return{'showPlay':obj.showPlay}})
-    console.log(this.data.showPlayList)
+    //拿到当前播放音频的index值
     // this.data.index=e.currentTarget.dataset.id
-    // const audio = wx.getBackgroundAudioManager();
-    // if(this.data.showPlay){
-    //   audio.src=this.data.postList[this.data.index].musicUrl;
+    // //如果当前播放状态是播放状态
+    // if(this.data.newList[this.data.index].showPlay){
+    //   audio.src=this.data.newList[this.data.index].musicUrl;
     //   audio.autoplay = true;
-    //   audio.title=this.data.postList[this.data.index].songName
-    //   this.data.showPlay=this.data.postList[this.data.index].showPlay
-    //   this.setData({
-    //     showPlay:false
+    //   audio.title=this.data.newList[this.data.index].songName
+    //   // 所有index的showplay值归0
+    //   this.data.newList=this.data.newList.map((item)=>{
+    //     // console.log(item.showPlay)
+    //     item.showPlay=true
+    //     return item
     //   })
-    // }else{
-    //   audio.pause();
+    //   //将播放状态修改为false
+    //   this.data.newList[this.data.index].showPlay=false
+    //   console.log(this.data.newList)
     //   this.setData({
-    //     showPlay:true
+    //     newList:this.data.newList
     //   })
     // }
+    // else{
+    //   audio.pause();
+    //   this.data.newList[this.data.index].showPlay=true
+    //   console.log(this.data.newList)
+    //   this.setData({
+    //     newList:this.data.newList
+    //   })
+    // }
+    // this.data.showPlayList = this.data.newList.map(obj => {return{'showPlay':obj.showPlay}})
+    // console.log(this.data.showPlayList);
+    // wx.setStorage({
+    //   key:'isPlay',
+    //   data:this.data.showPlayList
+    // })
   },
 
   onPullDownRefresh: function () {
     this.onLoad(); //重新加载onLoad()
   },
-
-  onTapToDetail:function(e){
-    let postId=e.currentTarget.dataset.id;
-    console.log(postId);
-    wx.navigateTo({
-      url:'../story/detail/detail?id='+postId,
-    })
-  },
-
-  onTapTo1:function(e) {
-    let label ="逃避拥挤";
-    wx.navigateTo({
-      url: '../story/sort/sort?id=' + label,
-    })
-  },
-
-  onTapTo2: function (e) {
-    let label="坐地成仙"
-    wx.navigateTo({
-      url: '../story/sort/sort?id=' + label,
-    })
-  },
-
-  onTapTo3: function (e) {
-    let label = "完全不怂"
-    wx.navigateTo({
-      url: '../story/sort/sort?id=' + label,
-    })
-  },
-
-  onTapTo4: function (e) {
-    let label = "哎哟不错"
-    wx.navigateTo({
-      url: '../story/sort/sort?id=' + label,
-    })
-  },
-
-  onTapTo5: function (e) {
-    let label = "活捉奇葩"
-    wx.navigateTo({
-      url: '../story/sort/sort?id=' + label,
-    })
-  },
-
-  onTapToPop: function (e) {
-    let postId = e.currentTarget.dataset.id;
-    console.log(postId);
-    wx.navigateTo({
-      url: '../story/detail/detail?id=' + postId,
-    })
-  },
-
-  onTapToCountry: function (e) {
-    let postId = e.currentTarget.dataset.id;
-    console.log(postId);
-    wx.navigateTo({
-      url: '../story/detail/detail?id=' + postId,
-    })
-  },
-
-  onTapToRap: function (e) {
-    let postId = e.currentTarget.dataset.id;
-    console.log(postId);
-    wx.navigateTo({
-      url: '../story/detail/detail?id=' + postId,
-    })
-  },
-
-
 
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -311,9 +305,6 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
-
-  },
 
   /**
    * 生命周期函数--监听页面隐藏

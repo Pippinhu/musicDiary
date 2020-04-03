@@ -46,7 +46,9 @@
               <view class="singer">{{item.singer}}</view>
             </view>
             <!-- <image bindtap="playMusic"src="/images/{{item.showPlay?'play':'pause'}}.png"class="play-icon"data-id="{{index}}"></image> -->
-            <image bindtap="playMusic"src="{{item.showPlay?'/images/play.png':'https://free-1258441037.cos.ap-chengdu.myqcloud.com/playing_green.gif'}}"class="play-icon"data-id="{{index}}"></image>
+            <view class="play_hotzone" bindtap="playMusic"data-id="{{index}}">
+              <image src="{{item.showPlay?'/images/play.png':'https://free-1258441037.cos.ap-chengdu.myqcloud.com/playing_green.gif'}}"class="play-icon"></image>
+            </view>
             <!-- <view class="{{item.showPlay?'play-icon':'pause-icon'}}"></view> -->
           </view>
           <view class="feelings">{{item.feelings}}

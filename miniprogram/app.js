@@ -11,11 +11,13 @@ App({
       })
     }
 
-    this.globalData = {}
+    this.globalData = {
+      play:false,
+      pause:false,
+      stop:true,
+      list:[],//正在播放的音频列表
+      listIndex:0,// 正在播放的音频索引
+      listId:[]
+    }
   },
-
-  globalData: {
-    g_isPlayingMusic: false,
-    g_currentMusicPostId:null
-  }
 })
