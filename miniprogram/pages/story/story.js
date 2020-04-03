@@ -59,64 +59,6 @@ Page({
       }
     })
   },
-    
-    // }
-        //两者数据结合
-        // let coupleList = list.concat(newList)
-        // //找到两者数据里ID不一样的或者showPlay不存在的组成新的差异数据列表
-        // let diffList = coupleList.filter(e=>
-        //     e._id=
-        // )
-
-
-
-
-
-
-        // let list = app.globalData.list 
-        // // let listId = app.globalData.listId
-        // let newList=res.result.data      
-        // // if(list.length!==0){
-        //   //先把当前列表的id挑出来
-        //   // let nowId = newList.map(item=>item._id)
-        //   // //找到id不一致的那个
-        //   // let lonelyId = nowId.filter((item)=>
-        //   //     listId.indexOf(item)==-1
-        //   // )
-        //   // console.log(lonelyId)
-        //   // //找到这个不同的id所在的index的,然后给这个element加上showPlay=true
-        //   // let finalList = 
-
-        //   //其实应该是这个逻辑,让新列表的每一个id和旧列表的每一个id去对比,一致的showPlay=旧列表的Show,id不一致的showPlay==true
-        //   // console.log(list[0]._id)
-        //   // console.log(newList[0]._id)
-        //   if(list.length!==0){
-        //     for(let i=0;i<newList.length;i++){
-        //       for(let j=0;j<list.length;j++){
-        //         if(newList[i]._id===list[j]._id){
-        //           newList[i].showPlay=list[j].showPlay
-        //           return
-        //         }
-        //         else{
-        //           newList[i].showPlay=true
-        //         }
-        //       }
-        //     }
-        //     this.setData({
-        //       newList:newList
-        //     })   
-        //     app.globalData.list = that.data.newList
-        //   }  
-        //   else{
-        //     newList = newList.map(function(item){
-        //       return Object.assign(item,{showPlay:true})
-        //       })
-        //     this.setData({
-        //       newList:newList
-        //     }) 
-        //     app.globalData.list = that.data.newList
-        // }
-
 
   toForm:function(){
     wx.navigateTo({
