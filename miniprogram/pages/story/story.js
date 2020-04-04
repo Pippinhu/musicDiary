@@ -14,14 +14,7 @@ Page({
     index: '',
     newList: [],
     showPlayList: '',
-  },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function () {
-    this.getData();
-    wx.stopPullDownRefresh()
+    currentMusicId: null,
   },
 
   getData() {
@@ -38,7 +31,9 @@ Page({
         if (list.length !== 0) {
           //找到两个列表中不同的数据
           let diffList = newList.filter(e => !list.some(e1 => e1._id == e._id))
-          let finalDiff = diffList.map(item => Object.assign(item, { showPlay: true }))
+          let finalDiff = diffList.map(item => Object.assign(item, {
+            showPlay: true
+          }))
           if (diffList.length !== 0) {
             list.splice(0, 0, finalDiff[0])
           }
@@ -48,7 +43,9 @@ Page({
           app.globalData.list = list
         } else {
           newList = newList.map(function (item) {
-            return Object.assign(item, { showPlay: true })
+            return Object.assign(item, {
+              showPlay: true
+            })
           })
           that.setData({
             newList: newList
@@ -59,13 +56,62 @@ Page({
     })
   },
 
-  toForm: function () {
+  toForm() {
     wx.navigateTo({
       url: '../story/input/input'
     })
   },
 
-  onShow: function () {
+  musicOn({
+    musicUrl,
+    songName,
+    singer
+  }) {
+    debugger
+    const audio = wx.getBackgroundAudioManager();
+    audio.src = musicUrl
+    audio.title = songName
+    audio.singer = singer
+  },
+
+  playMusic(e) {
+    const audio = wx.getBackgroundAudioManager();
+    let index = e.currentTarget.dataset.id
+    let list = app.globalData.list
+    if (app.globalData.stop) {
+      this.musicOn(list[index])
+    } else {
+      if (app.globalData.play) {
+        //点击了列表另一个音乐
+        if (index != app.globalData.listIndex) {
+          this.musicOn(list[index])
+          list[app.globalData.listIndex].showPlay = true
+          this.setData({
+            newList: list
+          })
+        } else {
+          audio.pause()
+        }
+      } else {
+        if (index !== app.globalData.listIndex) {
+          this.musicOn(list[index])
+        } else {
+          audio.play()
+        }
+      }
+    }
+    app.globalData.listIndex = index
+  },
+
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad() {
+    this.getData();
+    wx.stopPullDownRefresh()
+  },
+
+  onShow() {
     const audio = wx.getBackgroundAudioManager()
     audio.onPlay(() => {
       let list = app.globalData.list
@@ -117,8 +163,7 @@ Page({
           newList: list
         })
         app.globalData.listIndex = 0
-      }
-      else {
+      } else {
         audio.src = list[next].musicUrl
         audio.title = list[next].songName
         audio.singer = list[next].singer
@@ -131,51 +176,10 @@ Page({
     })
   },
 
-  musicOn: function (index, list) {
-    const audio = wx.getBackgroundAudioManager();
-    audio.src = list[index].musicUrl
-    audio.title = list[index].songName
-    audio.singer = list[index].singer
-  },
-
-  playMusic: function (e) {
-    const audio = wx.getBackgroundAudioManager();
-    let index = e.currentTarget.dataset.id
-    let list = app.globalData.list
-    if (app.globalData.stop) {
-      this.musicOn(index, list)
-    } else {
-      if (app.globalData.play) {
-        //点击了列表另一个音乐
-        if (index != app.globalData.listIndex) {
-          this.musicOn(index, list)
-          list[app.globalData.listIndex].showPlay = true
-          this.setData({
-            newList: list
-          })
-        }
-        else {
-          audio.pause()
-        }
-      } else {
-        if (index !== app.globalData.listIndex) {
-          this.musicOn(index, list)
-        } else {
-          audio.play()
-        }
-      }
-    }
-    app.globalData.listIndex = index
-  },
-
-  onPullDownRefresh: function () {
-    this.onLoad(); //重新加载onLoad()
-  },
-
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady() {
 
   },
 
@@ -186,24 +190,25 @@ Page({
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
+  onHide() {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
+  onUnload() {
 
   },
 
-
-
+  onPullDownRefresh() {
+    this.onLoad(); //重新加载onLoad()
+  },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage() {
 
   }
 })
