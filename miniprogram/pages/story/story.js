@@ -79,9 +79,9 @@ Page({
     // 自动播放下一首
     audio.onEnded(() => {
       const musicList = this.data.musicList
-      const musicIndex = musicList.findIndex(e => e._id === musicId)
+      const musicIndex = musicList.findIndex(e => e._id === this.data.currentMusicId)
       const nextMusicIndex = (musicIndex + musicList.length) % musicList.length
-      his.setMusicCtxAndPlay(musicList[nextMusicIndex])
+      this.setMusicCtxAndPlay(musicList[nextMusicIndex])
     })
   },
 
