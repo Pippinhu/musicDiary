@@ -1,71 +1,24 @@
 <!--pages/story/story.wxml-->
 
 <view class="container">
-  <!-- <view class="sort">
-      <text class="headline">心境</text>
-      <scroll-view class="sort-list"scroll-x> -->
-  <!-- <view class="sort-list">       -->
-  <!-- <view bindtap="onTapToJazz"class="card">逃避拥挤</view> -->
-  <!-- <view bindtap="onTapTo1"class="box">
-            <image class="card"src="/images/sort-1.jpg"></image>
-            <view data-id="逃避拥挤"class="card-title">逃避拥挤</view>
-          </view>
-          <view bindtap="onTapTo2"class="box">
-            <image class="card"src="/images/sort-2.jpg"></image>
-            <view data-id="坐地成仙"class="card-title">坐地成仙</view>
-          </view>
-          <view bindtap="onTapTo3"class="box">
-            <image class="card"data-id="完全不怂"src="/images/sort-3.jpg"></image>
-            <view class="card-title">完全不怂</view>
-          </view>
-          <view bindtap="onTapTo4"class="box">
-            <image class="card"data-id="哎哟不错"src="/images/sort-4.jpg"></image>
-            <view class="card-title">哎哟不错</view>
-          </view>
-          <view bindtap="onTapTo5"class="box">
-            <image class="card"src="/images/sort-5.jpg"></image>
-            <view class="card-title">活捉奇葩</view>
-          </view> -->
-  <!-- <view bindtap="onTapToRock"class="card">误入幻境
-  </view> -->
-  <!-- <view bindtap="onTapToPop"class="card">想跳起来</view>
-          <view bindtap="onTapToCountry"class="card">民谣</view>
-          <view bindtap="onTapToRap"class="card">说唱</view> -->
-  <!-- </view> -->
-  <!-- </scroll-view>
-    </view> -->
-  <!-- <view class="content"> -->
-  <text class="headline">无口电波</text>
-  <view class="content">
-    <block wx:for="{{newList}}">
-      <view class="postList">
-        <view class="info">
-          <image class="pic" mode="aspectFill" src="{{item.albumPic}}"></image>
-          <view class="songInfo">
-            <view class="songName">{{item.songName}}</view>
-            <view class="singer">{{item.singer}}</view>
-          </view>
-          <!-- <image bindtap="playMusic"src="/images/{{item.showPlay?'play':'pause'}}.png"class="play-icon"data-id="{{index}}"></image> -->
-          <view class="play_hotzone" bindtap="playMusic" data-id="{{index}}">
-            <image
-              src="{{item.showPlay?'/images/play.png':'https://free-1258441037.cos.ap-chengdu.myqcloud.com/playing_green.gif'}}"
-              class="play-icon"></image>
-          </view>
-          <!-- <view class="{{item.showPlay?'play-icon':'pause-icon'}}"></view> -->
-        </view>
-        <view class="feelings">{{item.feelings}}
-          <!-- <view class="arrower"></view> -->
-        </view>
-        <!-- <view class="post"data-id="{{item._id}}">
-            <image mode="aspectFill" class="pic"src="{{item.img}}"></image> 
-            <view class="post-headline">{{item.title}}</view>
-            <view class="abstract">{{item.abstract}}</view>
-          </view> -->
-      </view>
-    </block>
-  </view>
+	<text class="headline">无口电波</text>
+	<view class="content">
+		<block wx:for="{{musicList}}">
+			<view class="postList">
+				<view class="info">
+					<image class="pic" mode="aspectFill" src="{{item.albumPic}}"></image>
+					<view class="songInfo">
+						<view class="songName">{{item.songName}}</view>
+						<view class="singer">{{item.singer}}</view>
+					</view>
+					<view class="play_hotzone" bindtap="toggleMusic" data-id="{{item._id}}">
+						<image src="{{item._id !== currentMusicId ? '/images/play.png' : 'https://free-1258441037.cos.ap-chengdu.myqcloud.com/playing_green.gif'}}" class="play-icon"></image>
+					</view>
+				</view>
+				<view class="feelings">{{item.feelings}}
+				</view>
+			</view>
+		</block>
+	</view>
 </view>
-<!-- <view class="out"bindtap="toForm">
-    <view class="core">推荐一首歌吧</view>
-  </view> -->
 <image bindtap="toForm" class="btn_icon" src="/images/btn.png"></image>
