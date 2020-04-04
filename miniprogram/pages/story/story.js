@@ -80,7 +80,7 @@ Page({
     audio.onEnded(() => {
       const musicList = this.data.musicList
       const musicIndex = musicList.findIndex(e => e._id === this.data.currentMusicId)
-      const nextMusicIndex = (musicIndex + musicList.length) % musicList.length
+      const nextMusicIndex = (musicIndex + 1) % musicList.length
       this.setMusicCtxAndPlay(musicList[nextMusicIndex])
     })
   },
