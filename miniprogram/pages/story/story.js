@@ -61,20 +61,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad() {
-    this.getData()
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
     const audio = wx.getBackgroundAudioManager()
     // 自动播放下一首
     audio.onEnded(() => {
@@ -83,30 +69,10 @@ Page({
       const nextMusicIndex = (musicIndex + 1) % musicList.length
       this.setMusicCtxAndPlay(musicList[nextMusicIndex])
     })
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
+    this.getData()
   },
 
   onPullDownRefresh() {
     this.getData()
   },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
-  }
 })
