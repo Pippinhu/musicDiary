@@ -69,6 +69,10 @@ Page({
     this.getData()
   },
 
+  onShow(){
+    this.getData()
+  },
+
   onPullDownRefresh() {
     this.getData()
   },

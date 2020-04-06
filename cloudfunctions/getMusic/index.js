@@ -4,7 +4,7 @@ cloud.init()
 const db = cloud.database()
 // 云函数入口函数
 exports.main = async (event, context) => {
-  let list=await db.collection('music').orderBy('sort', 'desc').get()
+  let list=await db.collection('music').orderBy('date', 'desc').orderBy('sort', 'desc').get()
   return{
     data:list.data
   }

@@ -10,7 +10,9 @@ Page({
     showPopup:false,
     linkMusic:'',
     showDefault:true,
-    songData:''
+    songData:'',
+    showText:false,
+    disable:true
   },
 
   onLoad: function() {
@@ -94,7 +96,29 @@ Page({
 
   bindText(event){
     this.data.feelings=event.detail.value
+    if(this.data.feelings!==''){
+      console.log(this.data.feelings)
+      this.setData({
+        showText:true,
+        disable:false
+      })
+    } 
   },
+
+  // onChange(e){
+  //   console.log(e.detail.lineCount)
+  //   if(e.detail.lineCount>1){
+  //     this.setData({
+  //       showText:true,
+  //       disable:false
+  //     })
+  //   }else{
+  //     this.setData({
+  //       showText:false,
+  //       disable:true
+  //     })
+  //   }
+  // },
 
   addPopup(){
     this.setData({
@@ -161,12 +185,13 @@ Page({
     const story = db.collection('music')
     let others={
       feelings:this.data.feelings,
-      sort:sort
+      sort:sort,
+      date:db.serverDate()
     }
     let allMusic=Object.assign(this.data.linkMusic,others)
     console.log(allMusic)
     story.add({
-      data:allMusic
+      data:allMusic,
       }).then(res => {
         wx.showToast({
           title: '添加成功！',
