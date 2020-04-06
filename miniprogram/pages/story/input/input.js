@@ -97,10 +97,14 @@ Page({
   bindText(event) {
     this.data.feelings = event.detail.value
     if (this.data.feelings !== '') {
-      console.log(this.data.feelings)
       this.setData({
         showText: true,
         disable: false
+      })
+    } else {
+      this.setData({
+        showText: false,
+        disable: true
       })
     }
   },
@@ -137,6 +141,7 @@ Page({
     let pattern = /\/\d+\//
     let str = that.data.link
     let str2 = pattern.exec(str)
+    console.log(str2)
     let str3 = str2[0];
     let id = str3.substring(1, str3.length - 1)
     return id
