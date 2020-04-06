@@ -3,19 +3,19 @@ const app = getApp()
 
 Page({
   data: {
-    id:'',
-    count:'',
-    feelings:'',
-    link:'',
-    showPopup:false,
-    linkMusic:'',
-    showDefault:true,
-    songData:'',
-    showText:false,
-    disable:true
+    id: '',
+    count: '',
+    feelings: '',
+    link: '',
+    showPopup: false,
+    linkMusic: '',
+    showDefault: true,
+    songData: '',
+    showText: false,
+    disable: true
   },
 
-  onLoad: function() {
+  onLoad: function () {
     const db = wx.cloud.database()
     // const list = db.collection('list')
     // list.get().then(res => {
@@ -74,7 +74,7 @@ Page({
     this.setData({ active: event.detail });
   },
 
-  onGetUserInfo: function(e) {
+  onGetUserInfo: function (e) {
     if (!this.data.logged && e.detail.userInfo) {
       this.setData({
         logged: true,
@@ -85,7 +85,7 @@ Page({
   },
 
   bindKeyInput(event) {
-    this.data.link=event.detail.value
+    this.data.link = event.detail.value
     // console.log(this.data.link)
     // let pattern=/\/\d+\//
     // let str=event.detail.value
@@ -94,15 +94,15 @@ Page({
     // console.log(this.data.id)
   },
 
-  bindText(event){
-    this.data.feelings=event.detail.value
-    if(this.data.feelings!==''){
+  bindText(event) {
+    this.data.feelings = event.detail.value
+    if (this.data.feelings !== '') {
       console.log(this.data.feelings)
       this.setData({
-        showText:true,
-        disable:false
+        showText: true,
+        disable: false
       })
-    } 
+    }
   },
 
   // onChange(e){
@@ -120,173 +120,173 @@ Page({
   //   }
   // },
 
-  addPopup(){
+  addPopup() {
     this.setData({
-      showPopup:true
+      showPopup: true
     })
   },
 
-  cancelPopup(){
+  cancelPopup() {
     this.setData({
-      showPopup:false
+      showPopup: false
     })
   },
 
-  getMusicId(){
-    let that=this
-    let pattern=/\/\d+\//
-    let str=that.data.link
-    let str2=pattern.exec(str)
-    let str3=str2[0];
-    let id=str3.substring(1, str3.length - 1)
+  getMusicId() {
+    let that = this
+    let pattern = /\/\d+\//
+    let str = that.data.link
+    let str2 = pattern.exec(str)
+    let str3 = str2[0];
+    let id = str3.substring(1, str3.length - 1)
     return id
   },
 
-  async submitPopup(){
+  async submitPopup() {
     this.data.id = await this.getMusicId()
     console.log(this.data.id)
-    let id=this.data.id;
-    let sort= this.data.count+1
-    let url = 'https://music.163.com/api/song/detail/?id='+id+'&ids=%5B'+id+ '%5D';
-    let that=this
-    let musicUrl='http://music.163.com/song/media/outer/url?id='+id+
-    '.mp3'
+    let id = this.data.id;
+    let sort = this.data.count + 1
+    let url = 'https://music.163.com/api/song/detail/?id=' + id + '&ids=%5B' + id + '%5D';
+    let that = this
+    let musicUrl = 'http://music.163.com/song/media/outer/url?id=' + id +
+      '.mp3'
     console.log(musicUrl)
     wx.request({
-      url: url, 
+      url: url,
       data: {},
       method: 'GET',
       success: function (res) {
-        let songName=res.data.songs[0].name
-        let songData={
+        let songName = res.data.songs[0].name
+        let songData = {
           //排序
-          sort:sort,
+          sort: sort,
           //歌名
-          songName:(songName.length>=15)?(songName.slice(0,16)+'...'):songName,
+          songName: (songName.length >= 15) ? (songName.slice(0, 16) + '...') : songName,
           //歌手
-          singer:res.data.songs[0].artists[0].name,
+          singer: res.data.songs[0].artists[0].name,
           //专辑图片
-          albumPic:res.data.songs[0].album.picUrl,
-          musicUrl:musicUrl,
+          albumPic: res.data.songs[0].album.picUrl,
+          musicUrl: musicUrl,
           // feelings:feelings   
         }
         that.setData({
-          linkMusic:songData,
-          showPopup:false,
-          showDefault:false,
-        })  
+          linkMusic: songData,
+          showPopup: false,
+          showDefault: false,
+        })
       }
     })
   },
 
-  confirm(){
-    let sort= this.data.count+1
+  confirm() {
+    let sort = this.data.count + 1
     const db = wx.cloud.database()
     const story = db.collection('music')
-    let others={
-      feelings:this.data.feelings,
-      sort:sort,
-      date:db.serverDate()
+    let others = {
+      feelings: this.data.feelings,
+      sort: sort,
+      date: db.serverDate()
     }
-    let allMusic=Object.assign(this.data.linkMusic,others)
+    let allMusic = Object.assign(this.data.linkMusic, others)
     console.log(allMusic)
     story.add({
-      data:allMusic,
-      }).then(res => {
-        wx.showToast({
-          title: '添加成功！',
+      data: allMusic,
+    }).then(res => {
+      wx.showToast({
+        title: '添加成功！',
+      })
+      setTimeout(function () {
+        wx.navigateBack({
+          url: '../story/story'
         })
-        setTimeout(function () {
-          wx.navigateBack({
-            url: '../story/story'
-              })
-            }, 1000)
-        } )
-    
-   },
+      }, 1000)
+    })
+
+  },
 
   // async submitPopup(){
-    
-    // this.data.id = await this.getMusicId()
-    // await this.getMusicData();
-    // // console.log(this.getMusicData)
-    // let musicData = await this.getMusicData()
-    // console.log(musicData)
-    // this.getMusicData().then((res)=>{
-    //   console.log(res)
-    // })
-    // this.setData({
-    //   linkMusic:musicData,
-    //   showPopup:false,
-    //   showDefault:false,
-    // })  
+
+  // this.data.id = await this.getMusicId()
+  // await this.getMusicData();
+  // // console.log(this.getMusicData)
+  // let musicData = await this.getMusicData()
+  // console.log(musicData)
+  // this.getMusicData().then((res)=>{
+  //   console.log(res)
+  // })
+  // this.setData({
+  //   linkMusic:musicData,
+  //   showPopup:false,
+  //   showDefault:false,
+  // })  
   // },
 
-//  async submitPopup(){
-//     console.log('提交')
-//     let id = await this.getMusicId()
-//     let sort= this.data.count+1
-//     // const db = wx.cloud.database()
-//     // const story = db.collection('music')
-//     let that=this;
-//     // let feelings=this.data.feelings
-//       let url = 'https://music.163.com/api/song/detail/?id='+id+'&ids=%5B'+id+ '%5D';
-//       let musicUrl='http://music.163.com/song/media/outer/url?id='+id+
-//       '.mp3'
-//       console.log(musicUrl)
-//       wx.request({
-//         url: url, 
-//         data: {},
-//         method: 'GET',
-//         success: function (res) {
-//           let songData={
-//             //排序
-//             sort:sort,
-//             //歌名
-//             songName:res.data.songs[0].name,
-//             //歌手
-//             singer:res.data.songs[0].artists[0].name,
-//             //专辑图片
-//             albumPic:res.data.songs[0].album.picUrl,
-//             musicUrl:musicUrl,
-//             // feelings:feelings,
-//           }
-    
-    
-//           // console.log(this.data.linkMusic)
-//           console.log(songData)
-//           // story.add({
-//           //   data:songData
-//           //   }).then(res => {
-//           //     that.setData({
-//           //       linkMusic:songData,
-//           //       showPopup:false,
-//           //       showDefault:false,
-//           //       })      
-//           //     })
-//               // wx.showToast({
-//               //   title: '添加成功！',
-//               // })
-//               // setTimeout(function () {
-//               //   wx.navigateBack({
-//               //     url: '../story/story'
-//               //       })
-//               //     }, 1000)
-//           // })
-//         }
-//       }).then(res=>{
-//         that.setData({
-//           linkMusic:songData,
-//           showPopup:false,
-//           showDefault:false,
-//           })  
-//         }
-//       )
-//   },
+  //  async submitPopup(){
+  //     console.log('提交')
+  //     let id = await this.getMusicId()
+  //     let sort= this.data.count+1
+  //     // const db = wx.cloud.database()
+  //     // const story = db.collection('music')
+  //     let that=this;
+  //     // let feelings=this.data.feelings
+  //       let url = 'https://music.163.com/api/song/detail/?id='+id+'&ids=%5B'+id+ '%5D';
+  //       let musicUrl='http://music.163.com/song/media/outer/url?id='+id+
+  //       '.mp3'
+  //       console.log(musicUrl)
+  //       wx.request({
+  //         url: url, 
+  //         data: {},
+  //         method: 'GET',
+  //         success: function (res) {
+  //           let songData={
+  //             //排序
+  //             sort:sort,
+  //             //歌名
+  //             songName:res.data.songs[0].name,
+  //             //歌手
+  //             singer:res.data.songs[0].artists[0].name,
+  //             //专辑图片
+  //             albumPic:res.data.songs[0].album.picUrl,
+  //             musicUrl:musicUrl,
+  //             // feelings:feelings,
+  //           }
 
 
- 
-  
+  //           // console.log(this.data.linkMusic)
+  //           console.log(songData)
+  //           // story.add({
+  //           //   data:songData
+  //           //   }).then(res => {
+  //           //     that.setData({
+  //           //       linkMusic:songData,
+  //           //       showPopup:false,
+  //           //       showDefault:false,
+  //           //       })      
+  //           //     })
+  //               // wx.showToast({
+  //               //   title: '添加成功！',
+  //               // })
+  //               // setTimeout(function () {
+  //               //   wx.navigateBack({
+  //               //     url: '../story/story'
+  //               //       })
+  //               //     }, 1000)
+  //           // })
+  //         }
+  //       }).then(res=>{
+  //         that.setData({
+  //           linkMusic:songData,
+  //           showPopup:false,
+  //           showDefault:false,
+  //           })  
+  //         }
+  //       )
+  //   },
+
+
+
+
   // confirm:async()=>{
   //   let pattern=/\/\d+\//
   //   let str=this.data.link
@@ -358,7 +358,7 @@ Page({
   //   }
   //   console.log(data)
   //   if(data.name && data.current && data.year && data.company && data.recommend && data.high){
-     
+
   //     info.add({
   //       data:data
   //     }).then(res => {
@@ -378,7 +378,7 @@ Page({
   //     })
   //   }
   // },
-  onGetOpenid: function() {
+  onGetOpenid: function () {
     // 调用云函数
     wx.cloud.callFunction({
       name: 'login',
@@ -398,7 +398,7 @@ Page({
       }
     })
   },
-  
+
   onShow: function () {
     // const db = wx.cloud.database()
     // const showPage=db.collection('show')
@@ -412,7 +412,7 @@ Page({
   onShareAppMessage: function (res) {
     return {
       title: this.data.message,
-      imageUrl:this.data.pic,
+      imageUrl: this.data.pic,
     }
   }
 })
