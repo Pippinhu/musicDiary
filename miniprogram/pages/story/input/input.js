@@ -133,12 +133,9 @@ Page({
   },
 
   getMusicId() {
-    let that = this
-    let pattern = /\/\d+\//
-    let str = that.data.link
-    let str2 = pattern.exec(str)
-    let str3 = str2[0];
-    let id = str3.substring(1, str3.length - 1)
+    const pattern = /song\D*(\d+)/
+    const { link } = this.data
+    const [, id] = pattern.exec(link)
     return id
   },
 
